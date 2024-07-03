@@ -1,0 +1,4 @@
+*.exe
+*.old
+./bin/
+config.h
