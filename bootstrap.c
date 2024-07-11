@@ -168,6 +168,16 @@ bool bootstrap_config(Build* build) {
      fclose(f);
      return true;
 }
+bool bootstrap_submodules() {
+    Nob_Cmd cmd = {0};
+    nob_cmd_append(&cmd, "git", "submodule", "update", "--init");
+    if (!nob_cmd_run_sync(cmd)) {
+        nob_cmd_free(cmd);
+        return false;
+    }
+    nob_cmd_free(cmd);
+    return true;
+}
 int main(int argc, char **argv) {
     NOB_GO_REBUILD_URSELF(argc,argv);
     char* arg;
@@ -189,6 +199,10 @@ int main(int argc, char **argv) {
            nob_log(NOB_ERROR, "Unexpected argument: %s",arg);
            abort();
         }
+    }
+    if(!bootstrap_submodules()) {
+        nob_log(NOB_ERROR, "Failed to bootstrap submodules!");
+        abort();
     }
     if((!build.gcc) || (!build.ld)) {
         if(!bootstrap_gcc()) {
