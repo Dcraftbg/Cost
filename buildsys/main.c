@@ -140,6 +140,7 @@ bool build_kernel_dir(const char* srcdir, bool forced) {
          
            opath.count = 0;
            nob_sb_append_cstr(&opath, BUILD_DIR);
+           nob_da_append(&opath, '/');
            nob_sb_append_cstr(&opath, strip_prefix(path, SRC_DIR)+1);
            nob_sb_append_null(&opath);
            if(!nob_mkdir_if_not_exists_silent(opath.items)) nob_return_defer(false);
@@ -208,7 +209,7 @@ bool find_objs(const char* dirpath, Nob_File_Paths *paths) {
         }
         if (type == NOB_FILE_DIRECTORY && strcmp(ent->d_name, ".") != 0 && strcmp(ent->d_name, "..") != 0) {
             sb.count = 0;
-            nob_sb_append_cstr(&sb,nob_temp_sprintf("%s/%s",dir,ent->d_name));
+            nob_sb_append_cstr(&sb,nob_temp_sprintf("%s/%s",dirpath,ent->d_name));
             nob_sb_append_null(&sb);
             if(!find_objs(sb.items, paths)) nob_return_defer(false);
         }

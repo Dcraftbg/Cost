@@ -1,4 +1,7 @@
 *.exe
 *.old
-./bin/
+bin/
+gcc/
+build
+bootstrap
 config.h
